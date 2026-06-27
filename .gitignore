@@ -1,3 +1,9 @@
+# IDE
+.idea/
+
+# Private
+private/
+
 # Compiled class file
 *.class
 
