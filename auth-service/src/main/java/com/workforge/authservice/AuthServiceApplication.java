@@ -1,4 +1,4 @@
-package com.workforge.auth_service;
+package com.workforge.authservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
