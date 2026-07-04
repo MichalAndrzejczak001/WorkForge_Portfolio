@@ -5,6 +5,7 @@ import com.workforge.jobservice.api.dto.request.CreateJobRequest;
 import com.workforge.jobservice.api.dto.request.UpdateJobRequest;
 import com.workforge.jobservice.api.dto.response.JobResponse;
 import com.workforge.jobservice.application.service.JobService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class JobController {
     private final JobService jobService;
 
     @PostMapping
-    public ResponseEntity<JobResponse> createJob(@RequestBody CreateJobRequest request,
+    public ResponseEntity<JobResponse> createJob(@Valid @RequestBody CreateJobRequest request,
                                                  @RequestHeader("X-User-Id") UUID recruiterId) {
         return ResponseEntity.status(HttpStatus.CREATED).body(jobService.createJob(request, recruiterId));
     }
@@ -38,7 +39,7 @@ public class JobController {
 
     @PutMapping("/{id}")
     public ResponseEntity<JobResponse> updateJob(@PathVariable UUID id,
-                                                 @RequestBody UpdateJobRequest request) {
+                                                 @Valid @RequestBody UpdateJobRequest request) {
         return ResponseEntity.ok(jobService.updateJob(id, request));
     }
 
@@ -50,7 +51,7 @@ public class JobController {
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<JobResponse> changeStatus(@PathVariable UUID id,
-                                                    @RequestBody ChangeStatusRequest status) {
+                                                    @Valid @RequestBody ChangeStatusRequest status) {
         return ResponseEntity.ok(jobService.changeStatus(id, status.getStatus()));
     }
 
