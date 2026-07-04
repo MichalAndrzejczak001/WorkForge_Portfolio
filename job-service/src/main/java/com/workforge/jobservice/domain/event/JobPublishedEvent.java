@@ -15,6 +15,7 @@ import java.util.UUID;
 public class JobPublishedEvent {
     private UUID jobId;
     private String title;
+    private String description;
     private String location;
     private BigDecimal salaryMin;
     private BigDecimal salaryMax;

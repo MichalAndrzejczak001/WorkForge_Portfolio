@@ -91,6 +91,7 @@ public class JobService {
             JobPublishedEvent event = JobPublishedEvent.builder()
                     .jobId(savedOffer.getId())
                     .title(savedOffer.getTitle())
+                    .description(savedOffer.getDescription())
                     .location(savedOffer.getLocation())
                     .salaryMin(savedOffer.getSalaryMin())
                     .salaryMax(savedOffer.getSalaryMax())
