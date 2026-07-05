@@ -39,7 +39,6 @@ public class AuthService {
                 .email(savedUser.getEmail())
                 .role(savedUser.getRole())
                 .build();
-
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -56,5 +55,4 @@ public class AuthService {
                 .role(user.getRole())
                 .build();
     }
-
 }
