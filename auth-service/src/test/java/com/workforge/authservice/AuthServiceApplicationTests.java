@@ -1,4 +1,4 @@
-package com.workforge.auth_service;
+package com.workforge.authservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
