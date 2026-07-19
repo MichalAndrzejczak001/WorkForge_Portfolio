@@ -1,0 +1,40 @@
+[
+  "Java", "Kotlin", "Python", "JavaScript", "TypeScript", "C#", "C++", "C", "Go", "Rust",
+  "PHP", "Ruby", "Scala", "Swift", "SQL", "Bash", "PowerShell",
+
+  "Spring", "Spring Boot", "Spring Security", "Spring Data JPA", "Spring Cloud", "Spring Kafka",
+  "Hibernate", "Quarkus", "Micronaut", "Jakarta EE",
+  "React", "Angular", "Vue.js", "Next.js", "Node.js", "Express.js", "NestJS",
+  "Django", "Flask", "FastAPI", "ASP.NET", ".NET", ".NET Core",
+  "Laravel", "Symfony", "Ruby on Rails",
+
+  "MySQL", "PostgreSQL", "MongoDB", "Redis", "Oracle Database", "MariaDB", "SQLite",
+  "Elasticsearch", "Cassandra", "DynamoDB", "Neo4j",
+
+  "Kafka", "RabbitMQ", "ActiveMQ", "gRPC", "REST API", "GraphQL", "SOAP", "WebSocket",
+
+  "Docker", "Kubernetes", "Helm", "Terraform", "Ansible", "Jenkins", "GitLab CI", "GitHub Actions",
+  "CircleCI", "AWS", "Azure", "Google Cloud Platform", "GCP", "Nginx", "Apache",
+  "Prometheus", "Grafana", "Jaeger", "ELK Stack", "Vault", "Istio",
+
+  "Git", "SVN", "Maven", "Gradle", "npm", "Yarn", "Webpack", "Vite", "Babel",
+
+  "JUnit", "Mockito", "TestNG", "Selenium", "Cypress", "Playwright", "Jest", "Vitest",
+  "pytest", "RestAssured", "Testcontainers", "JMeter", "Postman",
+
+  "HTML", "CSS", "SASS", "LESS", "Tailwind CSS", "Bootstrap", "Redux", "Zustand",
+  "TanStack Query", "MobX",
+
+  "Microservices", "Event-driven architecture", "Domain-Driven Design", "DDD", "CQRS",
+  "Clean Architecture", "Hexagonal Architecture", "SOLID", "Design Patterns", "TDD", "BDD",
+  "Agile", "Scrum", "Kanban", "CI/CD", "DevOps", "OAuth2", "OpenID Connect", "JWT",
+  "OWASP", "Load Balancing", "Circuit Breaker", "Message Queue", "Distributed Systems",
+
+  "Linux", "Unix", "Windows Server", "Networking", "TCP/IP", "DNS", "HTTP", "HTTPS",
+
+  "Machine Learning", "Deep Learning", "NLP", "spaCy", "TensorFlow", "PyTorch", "scikit-learn",
+  "Pandas", "NumPy",
+
+  "Figma", "Jira", "Confluence", "Slack", "MapStruct", "Lombok", "Flyway", "Liquibase",
+  "Resilience4j", "Swagger", "OpenAPI"
+]
