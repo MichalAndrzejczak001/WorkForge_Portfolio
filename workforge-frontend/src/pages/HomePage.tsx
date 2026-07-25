@@ -4,7 +4,7 @@ function HomePage() {
             <h1 className="text-2xl font-bold">Workforge</h1>
             <p className="text-gray-600">Strona główna - w budowie</p>
         </div>
-    )
+    );
 }
 
-export default HomePage
+export default HomePage;

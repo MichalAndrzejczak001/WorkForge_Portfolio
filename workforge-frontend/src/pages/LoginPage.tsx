@@ -1,23 +1,23 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { authClient } from '../api/authClient'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { authClient } from '../api/authClient';
 
 function LoginPage() {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
-    const navigate = useNavigate()
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault()
-        setError('')
+        e.preventDefault();
+        setError('');
 
         try {
-            const response = await authClient.post('/api/auth/login', {email, password})
-            localStorage.setItem('token', response.data.token)
-            navigate('/')
+            const response = await authClient.post('/api/auth/login', {email, password});
+            localStorage.setItem('token', response.data.token);
+            navigate('/');
         } catch {
-            setError('Nieprawidłowy email lub hasło.')
+            setError('Nieprawidłowy email lub hasło.');
         }
     }
 
@@ -45,7 +45,7 @@ function LoginPage() {
                 {error && <p className="text-red-600">{error}</p>}
             </form>
         </div>
-    )
+    );
 }
 
-export default LoginPage
+export default LoginPage;
