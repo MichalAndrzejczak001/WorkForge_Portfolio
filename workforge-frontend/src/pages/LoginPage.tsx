@@ -15,6 +15,7 @@ function LoginPage() {
         try {
             const response = await authClient.post('/api/auth/login', {email, password});
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('role', response.data.role);
             navigate('/');
         } catch {
             setError('Nieprawidłowy email lub hasło.');
