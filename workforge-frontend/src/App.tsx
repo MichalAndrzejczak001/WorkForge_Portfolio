@@ -5,6 +5,7 @@ import RegisterPage from './pages/RegisterPage.tsx';
 import ProtectedRoute from './components/ProtectedRoute.tsx';
 import JobsPage from './pages/JobsPage.tsx';
 import JobDetailsPage from './pages/JobDetailsPage.tsx';
+import CreateJobPage from './pages/CreateJobPage.tsx';
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/jobs" element={<JobsPage />} />
                 <Route path="/jobs/:id" element={<JobDetailsPage />} />
+                <Route path="/jobs/new" element={<CreateJobPage />} />
             </Route>
         </Routes>
     );

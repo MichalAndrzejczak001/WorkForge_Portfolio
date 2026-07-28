@@ -13,7 +13,7 @@ function Navigation (){
     return (
         <nav className="p-4 bg-gray-100 flex gap-4">
             {role === 'CANDIDATE' && <Link to="/jobs">Przeglądaj oferty</Link>}
-            {role === 'RECRUITER' && <span>Panel rekrutera</span>}
+            {role === 'RECRUITER' && <Link to="/jobs/new">Dodaj ofertę</Link>}
             <button onClick={handleLogout}>Wyloguj</button>
         </nav>
     );
