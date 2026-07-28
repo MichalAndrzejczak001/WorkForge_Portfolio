@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Navigation (){
     const role = localStorage.getItem('role');
@@ -12,7 +12,7 @@ function Navigation (){
 
     return (
         <nav className="p-4 bg-gray-100 flex gap-4">
-            {role === 'CANDIDATE' && <span>Przeglądaj oferty</span>}
+            {role === 'CANDIDATE' && <Link to="/jobs">Przeglądaj oferty</Link>}
             {role === 'RECRUITER' && <span>Panel rekrutera</span>}
             <button onClick={handleLogout}>Wyloguj</button>
         </nav>
