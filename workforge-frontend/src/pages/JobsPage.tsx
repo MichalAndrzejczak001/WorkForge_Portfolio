@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { jobClient } from '../api/jobClient';
+import { Link } from 'react-router-dom';
 
 interface Job {
     id: string;
@@ -25,7 +26,9 @@ function JobsPage() {
             <ul className="mt-4 flex flex-col gap-2">
                 {jobs.map((job) => (
                     <li key={job.id} className="border p-3 rounded">
-                        <h2 className="font-semibold">{job.title}</h2>
+                        <h2 className="font-semibold">
+                            <Link to={`/jobs/${job.id}`}>{job.title}</Link>
+                        </h2>
                         <p>{job.location}</p>
                     </li>
                 ))}
