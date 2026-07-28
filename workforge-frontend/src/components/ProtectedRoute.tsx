@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import Navigation from './Navigation.tsx';
 
 function ProtectedRoute() {
     const token = localStorage.getItem('token');
@@ -7,7 +8,12 @@ function ProtectedRoute() {
         return <Navigate to="/login" replace />;
     }
 
-    return <Outlet />;
+    return (
+            <>
+                <Navigation />
+                <Outlet />
+            </>
+    );
 }
 
 export default ProtectedRoute;
