@@ -55,6 +55,9 @@ public class JobController {
         return ResponseEntity.ok(jobService.changeStatus(id, status.getStatus()));
     }
 
-
+    @GetMapping("/recruiter/{recruiterId}")
+    public ResponseEntity<List<JobResponse>> getJobsByRecruiterId(@PathVariable UUID recruiterId) {
+        return ResponseEntity.ok(jobService.getJobsByRecruiterId(recruiterId));
+    }
 
 }

@@ -103,4 +103,9 @@ public class JobService {
         return JobMapper.toResponse(savedOffer);
     }
 
+    public List<JobResponse> getJobsByRecruiterId(UUID recruiterId) {
+        return jobRepository.findByRecruiterId(recruiterId).stream()
+                .map(JobMapper::toResponse)
+                .toList();
+    }
 }
