@@ -35,6 +35,7 @@ function MyJobsPage() {
     return (
         <div className="p-8">
             <h1 className="text-2xl font-bold">Moje oferty</h1>
+            {error && <p className="text-red-600">{error}</p>}
             <ul className="mt-4 flex flex-col gap-2">
                 {jobs.map((job) => (
                     <li key={job.id} className="border p-3 rounded">
