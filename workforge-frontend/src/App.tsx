@@ -7,6 +7,7 @@ import JobsPage from './pages/JobsPage.tsx';
 import JobDetailsPage from './pages/JobDetailsPage.tsx';
 import CreateJobPage from './pages/CreateJobPage.tsx';
 import MyJobsPage from './pages/MyJobsPage.tsx';
+import JobApplicantsPage from "./pages/JobApplicantsPage.tsx";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/jobs/:id" element={<JobDetailsPage />} />
                 <Route path="/jobs/new" element={<CreateJobPage />} />
                 <Route path="/my-jobs" element={<MyJobsPage />} />
+                <Route path="/jobs/:id/applicants" element={<JobApplicantsPage />} />
             </Route>
         </Routes>
     );
