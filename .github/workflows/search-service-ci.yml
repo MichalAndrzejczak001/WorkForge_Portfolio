@@ -5,7 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'search-service/**'
-
+      - '.github/workflows/search-service-ci.yml'
 jobs:
   build:
     runs-on: ubuntu-latest

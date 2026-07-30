@@ -25,5 +25,6 @@ class SearchServiceApplicationTests {
     @Test
     void contextLoads() {
     }
+
 }
 
