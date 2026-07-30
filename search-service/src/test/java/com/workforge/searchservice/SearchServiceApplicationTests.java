@@ -19,7 +19,7 @@ class SearchServiceApplicationTests {
 
     @DynamicPropertySource
     static void overrideProps(DynamicPropertyRegistry registry) {
-        registry.add("spring.elasticsearch.uris", () -> "http://" + elasticsearch.getHttpHostAddress());
+        registry.add("elasticsearch.uris", elasticsearch::getHttpHostAddress);
     }
 
     @Test
