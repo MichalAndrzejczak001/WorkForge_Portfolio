@@ -48,9 +48,11 @@ function JobDetailsPage() {
             <p className="mt-2">{job.location}</p>
             <p className="mt-2">{job.salaryMin} - {job.salaryMax}</p>
             <p className="mt-4">{job.description}</p>
+            {localStorage.getItem('role') === 'CANDIDATE' && (
             <button onClick={handleApply} className="mt-4 bg-blue-600 text-white p-2 rounded">
                 Aplikuj
             </button>
+            )}
             {applyMessage && <p className="mt-2">{applyMessage}</p>}
         </div>
     );
