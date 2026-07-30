@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import Navigation from './Navigation.tsx';
+import Navigation from './Navigation';
 
 function ProtectedRoute() {
     const token = localStorage.getItem('token');
