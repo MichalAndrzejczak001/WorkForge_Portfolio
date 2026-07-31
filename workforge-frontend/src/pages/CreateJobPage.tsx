@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jobClient } from '../api/jobClient';
+import { aiClient } from '../api/aiClient';
 
 function CreateJobPage() {
     const [title, setTitle] = useState('');
@@ -16,11 +17,17 @@ function CreateJobPage() {
         setError('');
 
         try {
-            await jobClient.post(
+            const response = await jobClient.post(
                 '/api/jobs',
                 { title, description, location, salaryMin, salaryMax },
                 { headers: { 'X-User-Id': localStorage.getItem('id') } },
             );
+
+            await aiClient.post('/api/ai/skills/extract', {
+               job_id: response.data.id,
+               description: description,
+            });
+
             navigate('/jobs');
         } catch {
             setError('Nie udało się utworzyć oferty.');

@@ -5,6 +5,7 @@ import { jobClient } from '../api/jobClient';
 interface Job {
     id: string;
     title: string;
+    description: string;
     location: string;
     status: string;
 }
@@ -29,7 +30,6 @@ function MyJobsPage() {
         } catch {
             setError('Nie udało się opublikować oferty.');
         }
-
     }
 
     return (
