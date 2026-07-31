@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { searchClient } from '../api/searchCLient';
+import { searchClient } from '../api/searchClient';
 
 interface JobResult {
     id: string;
@@ -45,4 +45,4 @@ function SearchPage() {
 
 }
 
-export default SearchPage
+export default SearchPage;
