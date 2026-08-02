@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: api-gateway
+
+jwt:
+  secret: workforge-secret-key-dev-minimum-32-chars
+
+server:
+  port: 8086
