@@ -28,7 +28,7 @@ function CreateJobPage() {
                description: description,
             });
 
-            navigate('/jobs');
+            navigate('/my-jobs');
         } catch {
             setError('Nie udało się utworzyć oferty.');
         }
