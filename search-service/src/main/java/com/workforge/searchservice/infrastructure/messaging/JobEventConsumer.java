@@ -20,7 +20,7 @@ public class JobEventConsumer {
         try  {
             JobOfferDocument document = objectMapper.readValue(message, JobOfferDocument.class);
             jobSearchRepository.save(document);
-            log.info("Indexed job offer: {}", document.getId());
+            log.info("Indexed job offer: {}", document.getJobId());
         } catch (Exception e) {
             log.error("Failed to process Kafka message", e);
         }

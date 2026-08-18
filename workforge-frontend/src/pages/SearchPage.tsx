@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { searchClient } from '../api/searchClient';
 
 interface JobResult {
-    id: string;
+    jobId: string;
     title: string;
     location: string;
 }
@@ -34,8 +34,8 @@ function SearchPage() {
             </form>
             <ul className="mt-4 flex flex-col gap-2">
                 {results.map((job) => (
-                    <li key={job.id} className="border p-3 rounded">
-                        <Link to={`/jobs/${job.id}`} className="font-semibold">{job.title}</Link>
+                    <li key={job.jobId} className="border p-3 rounded">
+                        <Link to={`/jobs/${job.jobId}`} className="font-semibold">{job.title}</Link>
                         <p>{job.location}</p>
                     </li>
                 ))}

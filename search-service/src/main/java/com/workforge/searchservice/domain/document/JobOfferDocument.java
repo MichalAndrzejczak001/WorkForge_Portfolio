@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 public class JobOfferDocument {
 
     @Id
-    private String id;
+    private String jobId;
 
     @Field(type = FieldType.Text)
     private String title;
