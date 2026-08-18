@@ -49,7 +49,7 @@ public class JobService {
     }
 
     public List<JobResponse> getAllJobs() {
-        return jobRepository.findAll().stream()
+        return jobRepository.findByStatus(JobStatus.PUBLISHED).stream()
                 .map(JobMapper::toResponse)
                 .toList();
     }
