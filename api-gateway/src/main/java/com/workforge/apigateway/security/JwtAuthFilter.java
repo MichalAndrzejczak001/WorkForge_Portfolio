@@ -1,5 +1,6 @@
 package com.workforge.apigateway.security;
 
+import com.nimbusds.jwt.JWTClaimsSet;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 @Component
 @RequiredArgsConstructor
@@ -34,8 +36,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String token = authHeader.substring(7);
 
+        JWTClaimsSet claims;
         try {
-            jwtValidator.validateToken(token);
+            claims = jwtValidator.validateToken(token);
         } catch (JwtExpiredException e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token has expired");
             return;
@@ -44,6 +47,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        filterChain.doFilter(request, response);
+        HeaderMapRequestWrapper wrapperRequest = new HeaderMapRequestWrapper(request);
+        try {
+            wrapperRequest.addHeader("X-User-Id", claims.getStringClaim("userId"));
+            wrapperRequest.addHeader("X-User-Role", claims.getStringClaim("role"));
+        } catch (ParseException e) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Malformed token claims.");
+            return;
+        }
+
+        filterChain.doFilter(wrapperRequest, response);
     }
 }

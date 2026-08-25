@@ -15,6 +15,4 @@ import java.util.UUID;
 public class CreateApplicationRequest {
     @NotNull
     private UUID jobId;
-    @NotNull
-    private UUID applicantId;
 }

@@ -20,7 +20,6 @@ function CreateJobPage() {
             const response = await jobClient.post(
                 '/api/jobs',
                 { title, description, location, salaryMin, salaryMax },
-                { headers: { 'X-User-Id': localStorage.getItem('id') } },
             );
 
             await aiClient.post('/api/ai/skills/extract', {

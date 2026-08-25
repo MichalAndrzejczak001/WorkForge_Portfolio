@@ -39,7 +39,6 @@ public class ApplicationServiceTest {
         UUID applicantId = UUID.randomUUID();
         CreateApplicationRequest request = CreateApplicationRequest.builder()
                 .jobId(jobId)
-                .applicantId(applicantId)
                 .build();
         Application savedApplication = Application.builder()
                 .jobId(jobId)
@@ -49,7 +48,7 @@ public class ApplicationServiceTest {
         when(applicationRepository.save(any())).thenReturn(savedApplication);
 
         // WHEN
-        ApplicationResponse response = applicationService.createApplication(request);
+        ApplicationResponse response = applicationService.createApplication(request, applicantId);
 
         // THEN
         assertThat(response.getJobId()).isEqualTo(jobId);

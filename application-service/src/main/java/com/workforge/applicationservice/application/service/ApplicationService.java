@@ -20,10 +20,10 @@ import java.util.UUID;
 public class ApplicationService {
     private final ApplicationRepository applicationRepository;
 
-    public ApplicationResponse createApplication(CreateApplicationRequest request) {
+    public ApplicationResponse createApplication(CreateApplicationRequest request, UUID applicantId) {
         Application application = Application.builder()
                 .jobId(request.getJobId())
-                .applicantId(request.getApplicantId())
+                .applicantId(applicantId)
                 .status(ApplicationStatus.PENDING)
                 .build();
 

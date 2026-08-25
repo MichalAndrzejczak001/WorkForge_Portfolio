@@ -21,8 +21,9 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @PostMapping
-    public ResponseEntity<ApplicationResponse> createApplication(@Valid @RequestBody CreateApplicationRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(applicationService.createApplication(request));
+    public ResponseEntity<ApplicationResponse> createApplication(@Valid @RequestBody CreateApplicationRequest request,
+                                                                 @RequestHeader("X-User-Id") UUID applicantId) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(applicationService.createApplication(request, applicantId));
     }
 
     @GetMapping("/{id}")

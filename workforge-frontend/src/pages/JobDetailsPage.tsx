@@ -47,7 +47,6 @@ function JobDetailsPage() {
         try {
             await applicationClient.post('/api/application', {
                 jobId: id,
-                applicantId: localStorage.getItem('id'),
             });
             setApplyMessage('Aplikacja wysłana!');
         } catch {
