@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -31,6 +32,17 @@ public class JobOffer {
     private JobStatus status;
     @Column(nullable = false)
     private UUID recruiterId;
+    private String companyName;
+    @Enumerated(EnumType.STRING)
+    private WorkMode workMode;
+    @Enumerated(EnumType.STRING)
+    private ExperienceLevel experienceLevel;
+    @ElementCollection
+    @CollectionTable(name = "job_offer_skills", joinColumns = @JoinColumn(name = "job_offer_id"))
+    @Column(name = "skill")
+    private List<String> skills;
+    private LocalDateTime publishedAt;
+    private LocalDateTime expiresAt;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

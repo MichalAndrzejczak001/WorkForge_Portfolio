@@ -81,7 +81,7 @@ public class JobService {
 
         jobOffer.setStatus(jobStatus);
 
-        if (jobStatus.equals(JobStatus.CLOSED)) {
+        if (jobStatus.equals(JobStatus.ARCHIVED)) {
             jobOffer.setClosedAt(LocalDateTime.now());
         }
 
