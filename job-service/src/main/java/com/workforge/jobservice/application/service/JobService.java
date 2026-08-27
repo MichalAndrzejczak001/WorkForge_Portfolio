@@ -12,6 +12,7 @@ import com.workforge.jobservice.infrastructure.messaging.JobEventProducer;
 import com.workforge.jobservice.infrastructure.persistence.JobRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,6 +34,11 @@ public class JobService {
                 .salaryMax(createJobRequest.getSalaryMax())
                 .status(JobStatus.DRAFT)
                 .recruiterId(recruiterId)
+                .companyName(createJobRequest.getCompanyName())
+                .workMode(createJobRequest.getWorkMode())
+                .experienceLevel(createJobRequest.getExperienceLevel())
+                .skills(createJobRequest.getSkills())
+                .expiresAt(createJobRequest.getExpiresAt())
                 .build();
 
         JobOffer savedOffer = jobRepository.save(jobOffer);
@@ -41,6 +47,7 @@ public class JobService {
 
     }
 
+    @Transactional(readOnly = true)
     public JobResponse getJob(UUID id) {
         JobOffer existingJobOffer = jobRepository.findById(id)
                 .orElseThrow(() -> new JobNotFoundException("Job with id " + id + " doesn't exist."));
@@ -48,6 +55,7 @@ public class JobService {
         return JobMapper.toResponse(existingJobOffer);
     }
 
+    @Transactional(readOnly = true)
     public List<JobResponse> getAllJobs() {
         return jobRepository.findByStatus(JobStatus.PUBLISHED).stream()
                 .map(JobMapper::toResponse)
@@ -63,6 +71,13 @@ public class JobService {
         jobOffer.setLocation(updateJobRequest.getLocation());
         jobOffer.setSalaryMin(updateJobRequest.getSalaryMin());
         jobOffer.setSalaryMax(updateJobRequest.getSalaryMax());
+        jobOffer.setCompanyName(updateJobRequest.getCompanyName());
+        jobOffer.setWorkMode(updateJobRequest.getWorkMode());
+        jobOffer.setExperienceLevel(updateJobRequest.getExperienceLevel());
+        jobOffer.setSkills(updateJobRequest.getSkills());
+        jobOffer.setExpiresAt(updateJobRequest.getExpiresAt());
+
+
 
         JobOffer savedOffer = jobRepository.save(jobOffer);
 
@@ -103,6 +118,7 @@ public class JobService {
         return JobMapper.toResponse(savedOffer);
     }
 
+    @Transactional(readOnly = true)
     public List<JobResponse> getJobsByRecruiterId(UUID recruiterId) {
         return jobRepository.findByRecruiterId(recruiterId).stream()
                 .map(JobMapper::toResponse)
