@@ -62,6 +62,7 @@ public class JobService {
                 .toList();
     }
 
+    @Transactional
     public JobResponse updateJob(UUID id, UpdateJobRequest updateJobRequest) {
         JobOffer jobOffer = jobRepository.findById(id)
                 .orElseThrow(() -> new JobNotFoundException("Job with id " + id + " doesn't exist."));
@@ -90,30 +91,39 @@ public class JobService {
         jobRepository.delete(jobOffer);
     }
 
-    public JobResponse changeStatus(UUID id, JobStatus jobStatus) {
+    @Transactional
+    public JobResponse publishJob(UUID id) {
         JobOffer jobOffer = jobRepository.findById(id)
                 .orElseThrow(() -> new JobNotFoundException("Job with id " + id + " doesn't exist."));
 
-        jobOffer.setStatus(jobStatus);
-
-        if (jobStatus.equals(JobStatus.ARCHIVED)) {
-            jobOffer.setClosedAt(LocalDateTime.now());
-        }
+        jobOffer.setStatus(JobStatus.PUBLISHED);
+        jobOffer.setPublishedAt(LocalDateTime.now());
 
         JobOffer savedOffer = jobRepository.save(jobOffer);
 
-        if (jobStatus.equals(JobStatus.PUBLISHED)) {
-            JobPublishedEvent event = JobPublishedEvent.builder()
-                    .jobId(savedOffer.getId())
-                    .title(savedOffer.getTitle())
-                    .description(savedOffer.getDescription())
-                    .location(savedOffer.getLocation())
-                    .salaryMin(savedOffer.getSalaryMin())
-                    .salaryMax(savedOffer.getSalaryMax())
-                    .recruiterId(savedOffer.getRecruiterId())
-                    .build();
-            jobEventProducer.sendJobPublishedEvent(event);
-        }
+        JobPublishedEvent event = JobPublishedEvent.builder()
+                .jobId(savedOffer.getId())
+                .title(savedOffer.getTitle())
+                .description(savedOffer.getDescription())
+                .location(savedOffer.getLocation())
+                .salaryMin(savedOffer.getSalaryMin())
+                .salaryMax(savedOffer.getSalaryMax())
+                .recruiterId(savedOffer.getRecruiterId())
+                .build();
+        jobEventProducer.sendJobPublishedEvent(event);
+
+        return JobMapper.toResponse(savedOffer);
+    }
+
+    @Transactional
+    public JobResponse archiveJob(UUID id) {
+        JobOffer jobOffer = jobRepository.findById(id)
+                .orElseThrow(() -> new JobNotFoundException("Job with id " + id + " doesn't exist."));
+
+        jobOffer.setStatus(JobStatus.ARCHIVED);
+        jobOffer.setClosedAt(LocalDateTime.now());
+
+        JobOffer savedOffer = jobRepository.save(jobOffer);
 
         return JobMapper.toResponse(savedOffer);
     }

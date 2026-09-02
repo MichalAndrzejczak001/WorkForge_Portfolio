@@ -1,10 +1,9 @@
 package com.workforge.jobservice.application.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 import com.workforge.jobservice.api.dto.request.CreateJobRequest;
 import com.workforge.jobservice.api.dto.response.JobResponse;
@@ -78,7 +77,7 @@ public class JobServiceTest {
     }
 
     @Test
-    void changeStatus_shouldSendKafkaEvent_whenStatusChangedToPublished() {
+    void publishJob_shouldSendKafkaEvent() {
         //GIVEN
         UUID id = UUID.randomUUID();
         JobOffer jobOffer = JobOffer.builder()
@@ -95,9 +94,34 @@ public class JobServiceTest {
         when(jobRepository.save(any(JobOffer.class))).thenReturn(jobOffer);
 
         //WHEN
-        jobService.changeStatus(id, JobStatus.PUBLISHED);
+        jobService.publishJob(id);
 
         //THEN
         verify(jobEventProducer).sendJobPublishedEvent(any());
+    }
+
+    @Test
+    void archiveJob_shouldSetArchivedStatusWithoutSendingKafkaEvent() {
+        //GIVEN
+        UUID id = UUID.randomUUID();
+        JobOffer jobOffer = JobOffer.builder()
+                .id(id)
+                .title("Java Developer")
+                .location("Warszawa")
+                .salaryMin(new BigDecimal("8000"))
+                .salaryMax(new BigDecimal("12000"))
+                .status(JobStatus.PUBLISHED)
+                .recruiterId(UUID.randomUUID())
+                .build();
+
+        when(jobRepository.findById(id)).thenReturn(Optional.of(jobOffer));
+        when(jobRepository.save(any(JobOffer.class))).thenReturn(jobOffer);
+
+        //WHEN
+        JobResponse result = jobService.archiveJob(id);
+
+        //THEN
+        assertThat(result.getStatus()).isEqualTo(JobStatus.ARCHIVED);
+        verify(jobEventProducer, never()).sendJobPublishedEvent(any());
     }
 }

@@ -1,6 +1,5 @@
 package com.workforge.jobservice.api.controller;
 
-import com.workforge.jobservice.api.dto.request.ChangeStatusRequest;
 import com.workforge.jobservice.api.dto.request.CreateJobRequest;
 import com.workforge.jobservice.api.dto.request.UpdateJobRequest;
 import com.workforge.jobservice.api.dto.response.JobResponse;
@@ -49,10 +48,14 @@ public class JobController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<JobResponse> changeStatus(@PathVariable UUID id,
-                                                    @Valid @RequestBody ChangeStatusRequest status) {
-        return ResponseEntity.ok(jobService.changeStatus(id, status.getStatus()));
+    @PostMapping("/{id}/publish")
+    public ResponseEntity<JobResponse> publishJob(@PathVariable UUID id) {
+        return ResponseEntity.ok(jobService.publishJob(id));
+    }
+
+    @PostMapping("/{id}/archive")
+    public ResponseEntity<JobResponse> archiveJob(@PathVariable UUID id) {
+        return ResponseEntity.ok(jobService.archiveJob(id));
     }
 
     @GetMapping("/recruiter/{recruiterId}")

@@ -25,7 +25,7 @@ function MyJobsPage() {
 
     async function handlePublish(jobId: string) {
         try {
-            await jobClient.patch(`/api/jobs/${jobId}/status`, { status: 'PUBLISHED' });
+            await jobClient.post(`/api/jobs/${jobId}/publish`);
             setJobs(jobs.map((job) => (job.id === jobId) ? {...job, status: 'PUBLISHED' } : job));
         } catch {
             setError('Nie udało się opublikować oferty.');
