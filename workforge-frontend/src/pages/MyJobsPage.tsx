@@ -32,6 +32,15 @@ function MyJobsPage() {
         }
     }
 
+    async function handleArchive(jobId: string) {
+        try {
+            await jobClient.post(`/api/jobs/${jobId}/archive`);
+            setJobs(jobs.map((job) => (job.id === jobId) ? {...job, status: 'ARCHIVED' } : job));
+        } catch {
+            setError('Nie udało się zarchiwizować oferty.');
+        }
+    }
+
     return (
         <div className="p-8">
             <h1 className="text-2xl font-bold">Moje oferty</h1>
@@ -45,6 +54,11 @@ function MyJobsPage() {
                         {job.status === 'DRAFT' && (
                             <button onClick={() => handlePublish(job.id)} className="bg-green-600 text-white p-1 rounded mt-1">
                                 Publikuj
+                            </button>
+                        )}
+                        {job.status !== 'ARCHIVED' && (
+                            <button onClick={() => handleArchive(job.id)} className="bg-gray-600 text-white p-1 rounded mt-1 ml-2">
+                                Archiwizuj
                             </button>
                         )}
                     </li>
