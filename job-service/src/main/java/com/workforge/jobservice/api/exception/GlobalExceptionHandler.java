@@ -1,5 +1,7 @@
 package com.workforge.jobservice.api.exception;
 
+import com.workforge.jobservice.application.exception.InvalidJobStatusException;
+import com.workforge.jobservice.application.exception.JobAccessDeniedException;
 import com.workforge.jobservice.application.exception.JobNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
+    @ExceptionHandler(JobAccessDeniedException.class)
+    public ResponseEntity<String> handleJobAccessDeniedException(JobAccessDeniedException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidJobStatusException.class)
+    public ResponseEntity<String> handleInvalidJobStatusException(InvalidJobStatusException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException e) {
         Map<String, String> errors = e.getBindingResult().getFieldErrors().stream()
@@ -30,7 +42,6 @@ public class GlobalExceptionHandler {
                 ));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
-
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception e) {

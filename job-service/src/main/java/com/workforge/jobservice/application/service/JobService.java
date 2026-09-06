@@ -3,6 +3,8 @@ package com.workforge.jobservice.application.service;
 import com.workforge.jobservice.api.dto.request.CreateJobRequest;
 import com.workforge.jobservice.api.dto.request.UpdateJobRequest;
 import com.workforge.jobservice.api.dto.response.JobResponse;
+import com.workforge.jobservice.application.exception.InvalidJobStatusException;
+import com.workforge.jobservice.application.exception.JobAccessDeniedException;
 import com.workforge.jobservice.application.exception.JobNotFoundException;
 import com.workforge.jobservice.domain.event.JobPublishedEvent;
 import com.workforge.jobservice.domain.model.JobOffer;
@@ -63,9 +65,16 @@ public class JobService {
     }
 
     @Transactional
-    public JobResponse updateJob(UUID id, UpdateJobRequest updateJobRequest) {
+    public JobResponse updateJob(UUID id, UpdateJobRequest updateJobRequest, UUID recruiterId) {
         JobOffer jobOffer = jobRepository.findById(id)
                 .orElseThrow(() -> new JobNotFoundException("Job with id " + id + " doesn't exist."));
+
+        if (!jobOffer.getRecruiterId().equals(recruiterId)) {
+            throw new JobAccessDeniedException("You are not allowed to modify this job offer.");
+        }
+        if (jobOffer.getStatus() != JobStatus.DRAFT) {
+            throw new InvalidJobStatusException("Only draft job offers can be updated.");
+        }
 
         jobOffer.setTitle(updateJobRequest.getTitle());
         jobOffer.setDescription(updateJobRequest.getDescription());
@@ -78,16 +87,22 @@ public class JobService {
         jobOffer.setSkills(updateJobRequest.getSkills());
         jobOffer.setExpiresAt(updateJobRequest.getExpiresAt());
 
-
-
         JobOffer savedOffer = jobRepository.save(jobOffer);
 
         return JobMapper.toResponse(savedOffer);
     }
 
-    public void deleteJob(UUID id) {
+    public void deleteJob(UUID id, UUID recruiterId) {
         JobOffer jobOffer = jobRepository.findById(id)
                 .orElseThrow(() -> new JobNotFoundException("Job with id " + id + " doesn't exist."));
+
+        if (!jobOffer.getRecruiterId().equals(recruiterId)) {
+            throw new JobAccessDeniedException("You are not allowed to delete this job offer.");
+        }
+        if (!jobOffer.getStatus().equals(JobStatus.DRAFT)) {
+            throw new InvalidJobStatusException("Only draft job offers can be deleted.");
+        }
+
         jobRepository.delete(jobOffer);
     }
 

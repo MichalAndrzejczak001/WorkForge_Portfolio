@@ -38,13 +38,15 @@ public class JobController {
 
     @PutMapping("/{id}")
     public ResponseEntity<JobResponse> updateJob(@PathVariable UUID id,
-                                                 @Valid @RequestBody UpdateJobRequest request) {
-        return ResponseEntity.ok(jobService.updateJob(id, request));
+                                                 @Valid @RequestBody UpdateJobRequest request,
+                                                 @RequestHeader("X-User-Id") UUID recruiterId) {
+        return ResponseEntity.ok(jobService.updateJob(id, request, recruiterId));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteJob(@PathVariable UUID id) {
-        jobService.deleteJob(id);
+    public ResponseEntity<Void> deleteJob(@PathVariable UUID id,
+                                          @RequestHeader("X-User-Id") UUID recruiterId) {
+        jobService.deleteJob(id, recruiterId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
