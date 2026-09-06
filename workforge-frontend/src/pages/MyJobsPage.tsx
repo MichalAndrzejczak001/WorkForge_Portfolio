@@ -41,6 +41,15 @@ function MyJobsPage() {
         }
     }
 
+    async function handleDelete(jobId: string) {
+        try {
+            await jobClient.delete(`/api/jobs/${jobId}`);
+            setJobs(jobs.filter((job) => job.id !== jobId));
+        } catch {
+            setError('Nie udało się usunąć oferty.');
+        }
+    }
+
     return (
         <div className="p-8">
             <h1 className="text-2xl font-bold">Moje oferty</h1>
@@ -59,6 +68,11 @@ function MyJobsPage() {
                         {job.status !== 'ARCHIVED' && (
                             <button onClick={() => handleArchive(job.id)} className="bg-gray-600 text-white p-1 rounded mt-1 ml-2">
                                 Archiwizuj
+                            </button>
+                        )}
+                        {job.status === 'DRAFT' && (
+                            <button onClick={() => handleDelete(job.id)} className="bg-red-600 text-white p-1 rounded mt-1 ml-2">
+                                Usuń
                             </button>
                         )}
                     </li>
