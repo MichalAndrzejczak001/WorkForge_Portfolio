@@ -1,5 +1,6 @@
 package com.workforge.jobservice.infrastructure.messaging;
 
+import com.workforge.jobservice.domain.event.JobDeletedEvent;
 import com.workforge.jobservice.domain.event.JobPublishedEvent;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +16,24 @@ public class JobEventProducer {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
-    private static final String TOPIC = "job.published";
+    private static final String PUBLISHED_TOPIC = "job.published";
+    private static final String DELETED_TOPIC = "job.deleted";
 
     public void sendJobPublishedEvent(JobPublishedEvent event) {
         try {
             String payload = objectMapper.writeValueAsString(event);
-            kafkaTemplate.send(TOPIC, event.getJobId().toString(), payload);
+            kafkaTemplate.send(PUBLISHED_TOPIC, event.getJobId().toString(), payload);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to send Kafka event", e);
+            throw new KafkaPublishException("Failed to send Kafka event", e);
+        }
+    }
+
+    public void sendJobDeletedEvent(JobDeletedEvent event) {
+        try {
+            String payload = objectMapper.writeValueAsString(event);
+            kafkaTemplate.send(DELETED_TOPIC, event.getJobId().toString(), payload);
+        } catch (Exception e) {
+            throw new KafkaPublishException("Failed to send Kafka event", e);
         }
     }
 }

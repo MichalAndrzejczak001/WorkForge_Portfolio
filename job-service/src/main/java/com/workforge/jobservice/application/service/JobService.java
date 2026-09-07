@@ -6,6 +6,7 @@ import com.workforge.jobservice.api.dto.response.JobResponse;
 import com.workforge.jobservice.application.exception.InvalidJobStatusException;
 import com.workforge.jobservice.application.exception.JobAccessDeniedException;
 import com.workforge.jobservice.application.exception.JobNotFoundException;
+import com.workforge.jobservice.domain.event.JobDeletedEvent;
 import com.workforge.jobservice.domain.event.JobPublishedEvent;
 import com.workforge.jobservice.domain.model.JobOffer;
 import com.workforge.jobservice.domain.model.JobStatus;
@@ -104,6 +105,11 @@ public class JobService {
         }
 
         jobRepository.delete(jobOffer);
+
+        JobDeletedEvent event = JobDeletedEvent.builder()
+                .jobId(jobOffer.getId())
+                .build();
+        jobEventProducer.sendJobDeletedEvent(event);
     }
 
     @Transactional
