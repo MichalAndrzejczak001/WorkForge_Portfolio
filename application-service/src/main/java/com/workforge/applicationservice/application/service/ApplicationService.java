@@ -4,9 +4,11 @@ import com.workforge.applicationservice.api.dto.request.ChangeStatusRequest;
 import com.workforge.applicationservice.api.dto.request.CreateApplicationRequest;
 import com.workforge.applicationservice.api.dto.response.ApplicationResponse;
 import com.workforge.applicationservice.application.exception.ApplicationNotFoundException;
+import com.workforge.applicationservice.domain.event.ApplicationSubmittedEvent;
 import com.workforge.applicationservice.domain.model.Application;
 import com.workforge.applicationservice.domain.model.ApplicationStatus;
 import com.workforge.applicationservice.infrastructure.mapper.ApplicationMapper;
+import com.workforge.applicationservice.infrastructure.messaging.ApplicationEventProducer;
 import com.workforge.applicationservice.infrastructure.persistence.ApplicationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ApplicationService {
     private final ApplicationRepository applicationRepository;
+    private final ApplicationEventProducer applicationEventProducer;
 
     public ApplicationResponse createApplication(CreateApplicationRequest request, UUID applicantId) {
         Application application = Application.builder()
@@ -28,6 +31,15 @@ public class ApplicationService {
                 .build();
 
         Application savedApplication = applicationRepository.save(application);
+
+        ApplicationSubmittedEvent event = ApplicationSubmittedEvent.builder()
+                .jobId(savedApplication.getJobId())
+                .applicationId(savedApplication.getId())
+                .applicantId(savedApplication.getApplicantId())
+                .build();
+
+        applicationEventProducer.sendApplicationSubmittedEvent(event);
+
 
         return ApplicationMapper.toResponse(savedApplication);
     }
