@@ -6,11 +6,12 @@ import com.workforge.jobservice.api.dto.response.JobResponse;
 import com.workforge.jobservice.application.service.JobService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,8 +33,8 @@ public class JobController {
     }
 
     @GetMapping
-    public ResponseEntity<List<JobResponse>> getAllJobs() {
-        return ResponseEntity.ok(jobService.getAllJobs());
+    public ResponseEntity<Page<JobResponse>> getAllJobs(Pageable pageable) {
+        return ResponseEntity.ok(jobService.getAllJobs(pageable));
     }
 
     @PutMapping("/{id}")
@@ -61,8 +62,8 @@ public class JobController {
     }
 
     @GetMapping("/recruiter/{recruiterId}")
-    public ResponseEntity<List<JobResponse>> getJobsByRecruiterId(@PathVariable UUID recruiterId) {
-        return ResponseEntity.ok(jobService.getJobsByRecruiterId(recruiterId));
+    public ResponseEntity<Page<JobResponse>> getJobsByRecruiterId(@PathVariable UUID recruiterId, Pageable pageable) {
+        return ResponseEntity.ok(jobService.getJobsByRecruiterId(recruiterId, pageable));
     }
 
 }

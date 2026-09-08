@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { jobClient } from '../api/jobClient';
-import { Link } from 'react-router-dom';
+import {useState, useEffect} from 'react';
+import {jobClient} from '../api/jobClient';
+import {Link} from 'react-router-dom';
 
 interface Job {
     id: string;
@@ -15,8 +15,9 @@ function JobsPage() {
     useEffect(() => {
         async function fetchJobs() {
             const response = await jobClient.get('/api/jobs');
-            setJobs(response.data);
+            setJobs(response.data.content);
         }
+
         fetchJobs();
     }, []);
 

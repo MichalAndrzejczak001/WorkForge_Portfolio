@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { jobClient } from '../api/jobClient';
+import {useState, useEffect} from 'react';
+import {Link} from 'react-router-dom';
+import {jobClient} from '../api/jobClient';
 
 interface Job {
     id: string;
@@ -18,15 +18,16 @@ function MyJobsPage() {
         async function fetchMyJobs() {
             const recruiterId = localStorage.getItem('id');
             const response = await jobClient.get(`/api/jobs/recruiter/${recruiterId}`);
-            setJobs(response.data);
+            setJobs(response.data.content);
         }
+
         fetchMyJobs();
     }, []);
 
     async function handlePublish(jobId: string) {
         try {
             await jobClient.post(`/api/jobs/${jobId}/publish`);
-            setJobs(jobs.map((job) => (job.id === jobId) ? {...job, status: 'PUBLISHED' } : job));
+            setJobs(jobs.map((job) => (job.id === jobId) ? {...job, status: 'PUBLISHED'} : job));
         } catch {
             setError('Nie udało się opublikować oferty.');
         }
@@ -35,7 +36,7 @@ function MyJobsPage() {
     async function handleArchive(jobId: string) {
         try {
             await jobClient.post(`/api/jobs/${jobId}/archive`);
-            setJobs(jobs.map((job) => (job.id === jobId) ? {...job, status: 'ARCHIVED' } : job));
+            setJobs(jobs.map((job) => (job.id === jobId) ? {...job, status: 'ARCHIVED'} : job));
         } catch {
             setError('Nie udało się zarchiwizować oferty.');
         }
@@ -61,17 +62,20 @@ function MyJobsPage() {
                         <p>{job.location} — {job.status}</p>
                         <Link to={`/jobs/${job.id}/applicants`}>Zobacz aplikacje</Link>
                         {job.status === 'DRAFT' && (
-                            <button onClick={() => handlePublish(job.id)} className="bg-green-600 text-white p-1 rounded mt-1">
+                            <button onClick={() => handlePublish(job.id)}
+                                    className="bg-green-600 text-white p-1 rounded mt-1">
                                 Publikuj
                             </button>
                         )}
                         {job.status !== 'ARCHIVED' && (
-                            <button onClick={() => handleArchive(job.id)} className="bg-gray-600 text-white p-1 rounded mt-1 ml-2">
+                            <button onClick={() => handleArchive(job.id)}
+                                    className="bg-gray-600 text-white p-1 rounded mt-1 ml-2">
                                 Archiwizuj
                             </button>
                         )}
                         {job.status === 'DRAFT' && (
-                            <button onClick={() => handleDelete(job.id)} className="bg-red-600 text-white p-1 rounded mt-1 ml-2">
+                            <button onClick={() => handleDelete(job.id)}
+                                    className="bg-red-600 text-white p-1 rounded mt-1 ml-2">
                                 Usuń
                             </button>
                         )}

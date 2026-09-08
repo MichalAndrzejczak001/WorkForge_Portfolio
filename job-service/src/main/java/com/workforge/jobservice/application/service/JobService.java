@@ -14,11 +14,12 @@ import com.workforge.jobservice.infrastructure.mapper.JobMapper;
 import com.workforge.jobservice.infrastructure.messaging.JobEventProducer;
 import com.workforge.jobservice.infrastructure.persistence.JobRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -59,10 +60,9 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public List<JobResponse> getAllJobs() {
-        return jobRepository.findByStatus(JobStatus.PUBLISHED).stream()
-                .map(JobMapper::toResponse)
-                .toList();
+    public Page<JobResponse> getAllJobs(Pageable pageable) {
+        return jobRepository.findByStatus(JobStatus.PUBLISHED, pageable)
+                .map(JobMapper::toResponse);
     }
 
     @Transactional
@@ -150,9 +150,8 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public List<JobResponse> getJobsByRecruiterId(UUID recruiterId) {
-        return jobRepository.findByRecruiterId(recruiterId).stream()
-                .map(JobMapper::toResponse)
-                .toList();
+    public Page<JobResponse> getJobsByRecruiterId(UUID recruiterId, Pageable pageable) {
+        return jobRepository.findByRecruiterId(recruiterId, pageable)
+                .map(JobMapper::toResponse);
     }
 }
