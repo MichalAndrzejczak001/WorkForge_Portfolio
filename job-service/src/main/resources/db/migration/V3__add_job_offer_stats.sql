@@ -1,0 +1,3 @@
+ALTER TABLE job_offers
+    ADD COLUMN views_count BIGINT NOT NULL DEFAULT 0,
+    ADD COLUMN applications_count BIGINT NOT NULL DEFAULT 0;

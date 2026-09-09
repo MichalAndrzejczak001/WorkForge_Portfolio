@@ -48,4 +48,8 @@ public class JobOffer {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
     private LocalDateTime closedAt;
+    @Column(nullable = false)
+    private Long viewsCount;
+    @Column(nullable = false)
+    private Long applicationsCount;
 }

@@ -3,6 +3,7 @@ package com.workforge.jobservice.application.service;
 import com.workforge.jobservice.api.dto.request.CreateJobRequest;
 import com.workforge.jobservice.api.dto.request.UpdateJobRequest;
 import com.workforge.jobservice.api.dto.response.JobResponse;
+import com.workforge.jobservice.api.dto.response.JobStatsResponse;
 import com.workforge.jobservice.application.exception.InvalidJobStatusException;
 import com.workforge.jobservice.application.exception.JobAccessDeniedException;
 import com.workforge.jobservice.application.exception.JobNotFoundException;
@@ -43,6 +44,8 @@ public class JobService {
                 .experienceLevel(createJobRequest.getExperienceLevel())
                 .skills(createJobRequest.getSkills())
                 .expiresAt(createJobRequest.getExpiresAt())
+                .viewsCount(0L)
+                .applicationsCount(0L)
                 .build();
 
         JobOffer savedOffer = jobRepository.save(jobOffer);
@@ -51,12 +54,15 @@ public class JobService {
 
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public JobResponse getJob(UUID id) {
         JobOffer existingJobOffer = jobRepository.findById(id)
                 .orElseThrow(() -> new JobNotFoundException("Job with id " + id + " doesn't exist."));
 
-        return JobMapper.toResponse(existingJobOffer);
+        existingJobOffer.setViewsCount(existingJobOffer.getViewsCount() + 1);
+        JobOffer savedOffer = jobRepository.save(existingJobOffer);
+
+        return JobMapper.toResponse(savedOffer);
     }
 
     @Transactional(readOnly = true)
@@ -153,5 +159,16 @@ public class JobService {
     public Page<JobResponse> getJobsByRecruiterId(UUID recruiterId, Pageable pageable) {
         return jobRepository.findByRecruiterId(recruiterId, pageable)
                 .map(JobMapper::toResponse);
+    }
+
+    @Transactional(readOnly = true)
+    public JobStatsResponse getJobsStats(UUID id) {
+        JobOffer jobOffer = jobRepository.findById(id)
+                .orElseThrow(() -> new JobNotFoundException("Job with id " + id + "doesn't exist."));
+
+        return JobStatsResponse.builder()
+                .viewsCount(jobOffer.getViewsCount())
+                .applicationsCount(jobOffer.getApplicationsCount())
+                .build();
     }
 }

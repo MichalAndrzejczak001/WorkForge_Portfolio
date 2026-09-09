@@ -3,6 +3,7 @@ package com.workforge.jobservice.api.controller;
 import com.workforge.jobservice.api.dto.request.CreateJobRequest;
 import com.workforge.jobservice.api.dto.request.UpdateJobRequest;
 import com.workforge.jobservice.api.dto.response.JobResponse;
+import com.workforge.jobservice.api.dto.response.JobStatsResponse;
 import com.workforge.jobservice.application.service.JobService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -64,6 +65,11 @@ public class JobController {
     @GetMapping("/recruiter/{recruiterId}")
     public ResponseEntity<Page<JobResponse>> getJobsByRecruiterId(@PathVariable UUID recruiterId, Pageable pageable) {
         return ResponseEntity.ok(jobService.getJobsByRecruiterId(recruiterId, pageable));
+    }
+
+    @GetMapping("/{id}/stats")
+    public ResponseEntity<JobStatsResponse> getJobStats(@PathVariable UUID id) {
+        return ResponseEntity.ok(jobService.getJobsStats(id));
     }
 
 }
