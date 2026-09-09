@@ -8,6 +8,7 @@ import com.workforge.jobservice.application.exception.InvalidJobStatusException;
 import com.workforge.jobservice.application.exception.JobAccessDeniedException;
 import com.workforge.jobservice.application.exception.JobNotFoundException;
 import com.workforge.jobservice.domain.event.JobDeletedEvent;
+import com.workforge.jobservice.domain.event.JobExpiredEvent;
 import com.workforge.jobservice.domain.event.JobPublishedEvent;
 import com.workforge.jobservice.domain.model.JobOffer;
 import com.workforge.jobservice.domain.model.JobStatus;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -170,5 +172,21 @@ public class JobService {
                 .viewsCount(jobOffer.getViewsCount())
                 .applicationsCount(jobOffer.getApplicationsCount())
                 .build();
+    }
+
+    @Transactional
+    public void expireOverdueJobs() {
+        List<JobOffer> overdueJobs = jobRepository.findByStatusAndExpiresAtBefore(JobStatus.PUBLISHED, LocalDateTime.now());
+
+        for (JobOffer jobOffer : overdueJobs) {
+            jobOffer.setStatus(JobStatus.EXPIRED);
+            jobOffer.setClosedAt(LocalDateTime.now());
+            jobRepository.save(jobOffer);
+
+            JobExpiredEvent event = JobExpiredEvent.builder()
+                    .jobId(jobOffer.getId())
+                    .build();
+            jobEventProducer.sendJobExpiredEvent(event);
+        }
     }
 }
