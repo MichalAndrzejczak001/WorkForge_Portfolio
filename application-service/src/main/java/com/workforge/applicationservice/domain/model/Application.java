@@ -30,4 +30,6 @@ public class Application {
     @CreationTimestamp
     private LocalDateTime appliedAt;
     private LocalDateTime updatedAt;
+    private String coverLetter;
+    private String recruiterNote;
 }
