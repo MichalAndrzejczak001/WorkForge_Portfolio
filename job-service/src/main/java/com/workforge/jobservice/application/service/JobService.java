@@ -7,6 +7,7 @@ import com.workforge.jobservice.api.dto.response.JobStatsResponse;
 import com.workforge.jobservice.application.exception.InvalidJobStatusException;
 import com.workforge.jobservice.application.exception.JobAccessDeniedException;
 import com.workforge.jobservice.application.exception.JobNotFoundException;
+import com.workforge.jobservice.domain.event.JobArchivedEvent;
 import com.workforge.jobservice.domain.event.JobDeletedEvent;
 import com.workforge.jobservice.domain.event.JobExpiredEvent;
 import com.workforge.jobservice.domain.event.JobPublishedEvent;
@@ -153,6 +154,11 @@ public class JobService {
         jobOffer.setClosedAt(LocalDateTime.now());
 
         JobOffer savedOffer = jobRepository.save(jobOffer);
+
+        JobArchivedEvent event = JobArchivedEvent.builder()
+                .jobId(savedOffer.getId())
+                .build();
+        jobEventProducer.sendJobArchivedEvent(event);
 
         return JobMapper.toResponse(savedOffer);
     }

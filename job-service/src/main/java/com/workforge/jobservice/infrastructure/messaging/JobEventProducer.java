@@ -1,5 +1,6 @@
 package com.workforge.jobservice.infrastructure.messaging;
 
+import com.workforge.jobservice.domain.event.JobArchivedEvent;
 import com.workforge.jobservice.domain.event.JobDeletedEvent;
 import com.workforge.jobservice.domain.event.JobExpiredEvent;
 import com.workforge.jobservice.domain.event.JobPublishedEvent;
@@ -20,6 +21,7 @@ public class JobEventProducer {
     private static final String PUBLISHED_TOPIC = "job.published";
     private static final String DELETED_TOPIC = "job.deleted";
     private static final String EXPIRED_TOPIC = "job.expired";
+    private static final String ARCHIVED_TOPIC = "job.archived";
 
     public void sendJobPublishedEvent(JobPublishedEvent event) {
         try {
@@ -45,6 +47,15 @@ public class JobEventProducer {
             kafkaTemplate.send(EXPIRED_TOPIC, event.getJobId().toString(), payload);
         } catch (Exception e) {
             throw new KafkaPublishException("Failed to send Kafka event", e);
+        }
+    }
+
+    public void sendJobArchivedEvent(JobArchivedEvent event) {
+        try {
+            String payload = objectMapper.writeValueAsString(event);
+            kafkaTemplate.send(ARCHIVED_TOPIC, event.getJobId().toString(), payload);
+        } catch (Exception e) {
+            throw new KafkaPublishException("Failed to send kafka event", e);
         }
     }
 }
