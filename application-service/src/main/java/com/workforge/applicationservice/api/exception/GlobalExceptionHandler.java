@@ -1,6 +1,7 @@
 package com.workforge.applicationservice.api.exception;
 
 import com.workforge.applicationservice.application.exception.ApplicationNotFoundException;
+import com.workforge.applicationservice.application.exception.DuplicateApplicationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +36,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleException(Exception e) {
         log.error("Unexpected error:", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error.");
+    }
+
+    @ExceptionHandler(DuplicateApplicationException.class)
+    public ResponseEntity<String> handleDuplicateApplicationException(DuplicateApplicationException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 }
