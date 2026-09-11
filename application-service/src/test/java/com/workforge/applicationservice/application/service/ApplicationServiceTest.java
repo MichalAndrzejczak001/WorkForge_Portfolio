@@ -6,6 +6,7 @@ import com.workforge.applicationservice.api.dto.response.ApplicationResponse;
 import com.workforge.applicationservice.application.exception.ApplicationNotFoundException;
 import com.workforge.applicationservice.domain.model.Application;
 import com.workforge.applicationservice.domain.model.ApplicationStatus;
+import com.workforge.applicationservice.infrastructure.messaging.ApplicationEventProducer;
 import com.workforge.applicationservice.infrastructure.persistence.ApplicationRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +29,9 @@ public class ApplicationServiceTest {
 
     @Mock
     private ApplicationRepository applicationRepository;
+
+    @Mock
+    private ApplicationEventProducer applicationEventProducer;
 
     @InjectMocks
     private ApplicationService applicationService;
