@@ -1,4 +1,4 @@
-package com.workforge.jobservice.domain.event;
+package com.workforge.applicationservice.domain.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,4 +16,3 @@ public class JobDeletedEvent {
     private UUID jobId;
     private LocalDateTime occurredAt;
 }
-

@@ -117,6 +117,7 @@ public class JobService {
 
         JobDeletedEvent event = JobDeletedEvent.builder()
                 .jobId(jobOffer.getId())
+                .occurredAt(LocalDateTime.now())
                 .build();
         jobEventProducer.sendJobDeletedEvent(event);
     }
@@ -139,6 +140,7 @@ public class JobService {
                 .salaryMin(savedOffer.getSalaryMin())
                 .salaryMax(savedOffer.getSalaryMax())
                 .recruiterId(savedOffer.getRecruiterId())
+                .occurredAt(savedOffer.getPublishedAt())
                 .build();
         jobEventProducer.sendJobPublishedEvent(event);
 
@@ -157,6 +159,7 @@ public class JobService {
 
         JobArchivedEvent event = JobArchivedEvent.builder()
                 .jobId(savedOffer.getId())
+                .occurredAt(savedOffer.getClosedAt())
                 .build();
         jobEventProducer.sendJobArchivedEvent(event);
 
@@ -191,6 +194,7 @@ public class JobService {
 
             JobExpiredEvent event = JobExpiredEvent.builder()
                     .jobId(jobOffer.getId())
+                    .occurredAt(jobOffer.getClosedAt())
                     .build();
             jobEventProducer.sendJobExpiredEvent(event);
         }
