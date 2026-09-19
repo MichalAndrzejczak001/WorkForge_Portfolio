@@ -6,8 +6,11 @@ import com.workforge.applicationservice.api.dto.response.ApplicationResponse;
 import com.workforge.applicationservice.application.exception.ApplicationNotFoundException;
 import com.workforge.applicationservice.domain.model.Application;
 import com.workforge.applicationservice.domain.model.ApplicationStatus;
+import com.workforge.applicationservice.domain.model.JobCacheStatus;
+import com.workforge.applicationservice.domain.model.JobStatusCache;
 import com.workforge.applicationservice.infrastructure.messaging.ApplicationEventProducer;
 import com.workforge.applicationservice.infrastructure.persistence.ApplicationRepository;
+import com.workforge.applicationservice.infrastructure.persistence.JobStatusCacheRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,6 +36,9 @@ public class ApplicationServiceTest {
     @Mock
     private ApplicationEventProducer applicationEventProducer;
 
+    @Mock
+    private JobStatusCacheRepository jobStatusCacheRepository;
+
     @InjectMocks
     private ApplicationService applicationService;
 
@@ -49,6 +55,7 @@ public class ApplicationServiceTest {
                 .applicantId(applicantId)
                 .status(ApplicationStatus.PENDING)
                 .build();
+        when(jobStatusCacheRepository.findById(jobId)).thenReturn(Optional.of(JobStatusCache.builder().jobId(jobId).status(JobCacheStatus.PUBLISHED).build()));
         when(applicationRepository.save(any())).thenReturn(savedApplication);
 
         // WHEN

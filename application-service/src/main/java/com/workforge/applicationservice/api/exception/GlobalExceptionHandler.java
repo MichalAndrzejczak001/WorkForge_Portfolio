@@ -2,6 +2,7 @@ package com.workforge.applicationservice.api.exception;
 
 import com.workforge.applicationservice.application.exception.ApplicationNotFoundException;
 import com.workforge.applicationservice.application.exception.DuplicateApplicationException;
+import com.workforge.applicationservice.application.exception.JobNotPublishedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,5 +42,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateApplicationException.class)
     public ResponseEntity<String> handleDuplicateApplicationException(DuplicateApplicationException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
+    @ExceptionHandler(JobNotPublishedException.class)
+    public ResponseEntity<String> handleJobNotPublishedException(JobNotPublishedException e) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(e.getMessage());
     }
 }

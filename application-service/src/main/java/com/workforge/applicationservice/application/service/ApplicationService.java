@@ -5,12 +5,16 @@ import com.workforge.applicationservice.api.dto.request.CreateApplicationRequest
 import com.workforge.applicationservice.api.dto.response.ApplicationResponse;
 import com.workforge.applicationservice.application.exception.ApplicationNotFoundException;
 import com.workforge.applicationservice.application.exception.DuplicateApplicationException;
+import com.workforge.applicationservice.application.exception.JobNotPublishedException;
 import com.workforge.applicationservice.domain.event.ApplicationSubmittedEvent;
 import com.workforge.applicationservice.domain.model.Application;
 import com.workforge.applicationservice.domain.model.ApplicationStatus;
+import com.workforge.applicationservice.domain.model.JobCacheStatus;
+import com.workforge.applicationservice.domain.model.JobStatusCache;
 import com.workforge.applicationservice.infrastructure.mapper.ApplicationMapper;
 import com.workforge.applicationservice.infrastructure.messaging.ApplicationEventProducer;
 import com.workforge.applicationservice.infrastructure.persistence.ApplicationRepository;
+import com.workforge.applicationservice.infrastructure.persistence.JobStatusCacheRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -24,8 +28,15 @@ import java.util.UUID;
 public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final ApplicationEventProducer applicationEventProducer;
+    private final JobStatusCacheRepository jobStatusCacheRepository;
 
     public ApplicationResponse createApplication(CreateApplicationRequest request, UUID applicantId) {
+        JobStatusCache jobStatusCache = jobStatusCacheRepository.findById(request.getJobId()).orElse(null);
+
+        if (jobStatusCache == null || jobStatusCache.getStatus() != JobCacheStatus.PUBLISHED) {
+            throw new JobNotPublishedException("Job offer " + request.getJobId() + " is not open for applications");
+        }
+
         Application application = Application.builder()
                 .jobId(request.getJobId())
                 .applicantId(applicantId)
