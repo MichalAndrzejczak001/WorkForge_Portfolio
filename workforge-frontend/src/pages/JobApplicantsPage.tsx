@@ -45,7 +45,7 @@ function JobApplicantsPage() {
                     <li key={app.id} className="border p-3 rounded">
                         <p>Kandydat: {app.applicantId}</p>
                         <p>Status: {app.status}</p>
-                        {(app.status === 'PENDING' || app.status === 'REVIEWED') && (
+                        {(app.status === 'PENDING' || app.status === 'REVIEWING') && (
                             <>
                                 <button onClick={() => handleChangeStatus(app.id, 'ACCEPTED')}
                                         className="bg-green-600 text-white p-1 rounded mt-1">
