@@ -6,6 +6,7 @@ import com.workforge.applicationservice.api.dto.response.ApplicationResponse;
 import com.workforge.applicationservice.application.exception.ApplicationNotFoundException;
 import com.workforge.applicationservice.application.exception.DuplicateApplicationException;
 import com.workforge.applicationservice.application.exception.JobNotPublishedException;
+import com.workforge.applicationservice.domain.event.ApplicationStatusChangedEvent;
 import com.workforge.applicationservice.domain.event.ApplicationSubmittedEvent;
 import com.workforge.applicationservice.domain.model.Application;
 import com.workforge.applicationservice.domain.model.ApplicationStatus;
@@ -81,9 +82,22 @@ public class ApplicationService {
     public ApplicationResponse changeStatus(UUID applicationId, ChangeStatusRequest request) {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ApplicationNotFoundException("Application with id " + applicationId + " doesn't exist."));
+
+        ApplicationStatus oldStatus = application.getStatus();
         application.setStatus(request.getStatus());
         application.setUpdatedAt(LocalDateTime.now());
         Application savedApplication = applicationRepository.save(application);
+
+        ApplicationStatusChangedEvent event = ApplicationStatusChangedEvent.builder()
+                .applicationId(savedApplication.getId())
+                .jobId(savedApplication.getJobId())
+                .applicantId(savedApplication.getApplicantId())
+                .oldStatus(oldStatus)
+                .newStatus(savedApplication.getStatus())
+                .changedAt(savedApplication.getUpdatedAt())
+                .build();
+        applicationEventProducer.sendApplicationStatusChangedEvent(event);
+
         return ApplicationMapper.toResponse(savedApplication);
     }
 }
